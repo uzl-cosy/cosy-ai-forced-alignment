@@ -1,0 +1,31 @@
+[tool.poetry]
+name = "laboratorium-ai-forced-alignment"
+version = "1.1.3"
+description = ""
+authors = ["Mathias Eulers <m.eulers@uni-luebeck.de>", "Finn Stoldt <f.stoldt@uni-luebeck.de>"]
+readme = "README.md"
+package-mode = true
+packages = [{include = "laboratorium_ai_forced_alignment"}]
+include = [
+    { path = "laboratorium_ai_forced_alignment/data/WhisperFilterList.json", format = ["sdist", "wheel"] },
+    { path = "laboratorium_ai_forced_alignment/data/Silero_Vad.pt", format = ["sdist", "wheel"] }
+]
+
+
+
+[tool.poetry.dependencies]
+python = "^3.10"
+numpy = "^1.26.4"
+torch = "^2.2.2"
+torchaudio = "^2.2.2"
+librosa = "^0.10.1"
+nltk = "^3.8.1"
+num2words = "^0.5.13"
+noisereduce = "^3.0.2"
+
+[tool.poetry.scripts]
+main = "laboratorium_ai_forced_alignment.main:main"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
