@@ -1,88 +1,181 @@
-# Laboratorium AI ASR
+# Laboratorium AI Forced Alignment
 
-Dieses Repository enthält das Projekt Laboratorium AI ASR, ein Python-basiertes Projekt, das für automatische Spracherkennung (ASR) entwickelt wurde.
+![Python](https://img.shields.io/badge/Python-3.10.13-blue.svg)
+![License](https://img.shields.io/badge/License-MIT-green.svg)
+![Poetry](https://img.shields.io/badge/Build-Poetry-blue.svg)
 
-## Voraussetzungen
+**Laboratorium AI Forced Alignment** ist ein Python-Paket zur erzwungenen Ausrichtung von Transkriptionen mit Audioaufnahmen. Es verarbeitet `.wav`-Audiodateien zusammen mit vorhandenen Transkriptionsdaten in `.json`-Dateien und generiert präzise Zeitstempel für Sätze und Wörter. Das Paket nutzt moderne Sprachmodelle und Bibliotheken wie `torchaudio` und `nltk` für effiziente und genaue Ergebnisse.
 
-Bevor du mit der Entwicklung beginnst, stelle sicher, dass `pyenv` und `pyenv-virtualenv` auf deinem System installiert sind.
+## Inhaltsverzeichnis
 
-### Installation von pyenv und pyenv-virtualenv
+- [Laboratorium AI Forced Alignment](#laboratorium-ai-forced-alignment)
+  - [Inhaltsverzeichnis](#inhaltsverzeichnis)
+  - [Überblick](#überblick)
+    - [Hauptmerkmale](#hauptmerkmale)
+  - [Installation und Build](#installation-und-build)
+  - [Nutzung](#nutzung)
+    - [CLI-Verwendung mit Filedescriptoren](#cli-verwendung-mit-filedescriptoren)
+      - [1. Modul starten und Modell laden](#1-modul-starten-und-modell-laden)
+      - [2. Warten auf das "ready" Signal](#2-warten-auf-das-ready-signal)
+      - [3. Dateien verarbeiten](#3-dateien-verarbeiten)
+    - [Beispiel mit Shell-Skript](#beispiel-mit-shell-skript)
+  - [Lizenz](#lizenz)
 
-#### Für macOS:
+## Überblick
 
-1. Installiere pyenv mit Homebrew:
+**Laboratorium AI Forced Alignment** bietet eine leistungsstarke Lösung zur Synchronisierung von Transkriptionen mit ihren entsprechenden Audioaufnahmen. Dies ist besonders nützlich für Anwendungen wie Untertitelung, Sprachforschung und automatische Inhaltsanalyse.
 
-   `brew update
-brew install pyenv`
+### Hauptmerkmale
 
-2. Füge pyenv zur `PATH`-Variable hinzu, indem du folgende Zeile in deine `.zshrc` oder `.bash_profile` einfügst:
+- **Forced Alignment:** Präzise Zuordnung von Transkriptionssätzen und -wörtern zu den entsprechenden Audiozeitstempeln.
+- **Modellvielfalt:** Nutzung fortschrittlicher Sprachmodelle für genaue Ergebnisse.
+- **Textnormalisierung:** Umfasst die Umwandlung von Zahlen in Worte und die Anpassung von Umlauten.
+- **Flexible Konfiguration:** Anpassung von Gerät (`DEVICE`) und Berechnungstyp (`COMPUTE_TYPE`) für optimale Leistung und Genauigkeit.
 
-   `export PATH="$(pyenv root)/shims:$PATH"`
+## Installation und Build
 
-3. Installiere pyenv-virtualenv:
+Dieses Paket wird mit [Poetry](https://python-poetry.org/) verwaltet. Folgen Sie diesen Schritten, um das Paket zu installieren und zu bauen:
 
-   `brew install pyenv-virtualenv`
+1. **Repository klonen:**
 
-4. Füge die Initialisierung von pyenv-virtualenv zu deiner Shell hinzu, indem du folgende Zeile in deine `.zshrc` oder `.bash_profile` einfügst:
+   ```bash
+   git clone https://github.com/yourusername/laboratorium-ai-forced-alignment.git
+   cd laboratorium-ai-forced-alignment
+   ```
 
-   `eval "$(pyenv virtualenv-init -)"`
+2. **Abhängigkeiten installieren:**
 
-#### Für Linux:
+   ```bash
+   poetry install
+   ```
 
-1. Installiere pyenv:
+3. **Virtuelle Umgebung aktivieren:**
 
-   `curl https://pyenv.run | bash`
+   ```bash
+   poetry shell
+   ```
 
-2. Füge pyenv zur `PATH`-Variable hinzu, indem du folgende Zeilen in deine `.bashrc` oder `.zshrc` einfügst:
+4. **Paket bauen:**
 
-   `export PATH="$HOME/.pyenv/bin:$PATH"
-eval "$(pyenv init --path)"`
+   ```bash
+   poetry build
+   ```
 
-3. Installiere pyenv-virtualenv, indem du es als Plugin hinzufügst:
+   Dieses Kommando erstellt die distributierbaren Dateien im `dist/`-Verzeichnis.
 
-   `git clone https://github.com/pyenv/pyenv-virtualenv.git $(pyenv root)/plugins/pyenv-virtualenv
-echo 'eval "$(pyenv virtualenv-init -)"' >> ~/.bashrc`
+## Nutzung
 
-## Einrichtung der Entwicklungsumgebung
+Das Paket wird über die Kommandozeile (CLI) als dauerhaft laufendes Modul ausgeführt. Es ermöglicht die erzwungene Ausrichtung von Transkriptionsdaten und Audioaufnahmen mittels Filedescriptoren. Die Kommunikation erfolgt über eine Pipe, wobei das Modul "ready" sendet, sobald das Modell geladen ist und bereit zur Verarbeitung ist.
 
-1. Klone das Repository und wechsle in das Projektverzeichnis:
+### CLI-Verwendung mit Filedescriptoren
 
-   `git clone [URL-TO-REPOSITORY]
-cd [REPOSITORY-NAME]`
+#### 1. Modul starten und Modell laden
 
-2. Richte das virtuelle Environment mit dem bereitgestellten Skript ein:
+Starten Sie das Forced Alignment-Modul über die CLI. Das Modul lädt das Modell und signalisiert über den Filedescriptor, dass es bereit ist.
 
-   `./venv-setup.sh`
+```bash
+python -m laboratorium_ai_forced_alignment -f <FD>
+```
 
-3. Aktiviere das virtuelle Environment:
+**Parameter:**
 
-   - Über das Terminal:
+- `-f`, `--fd`: Filedescriptor für die Pipe-Kommunikation.
 
-     `pyenv activate laboratorium_ai_asr_env`
+**Beispiel:**
 
-   - In VSCode:
+```bash
+python -m laboratorium_ai_forced_alignment -f 3
+```
 
-     Wähle das `laboratorium_ai_asr_env` als Python-Interpreter aus.
+#### 2. Warten auf das "ready" Signal
 
-## Entwicklung
+Nachdem das Modul gestartet wurde, lädt es das Forced Alignment-Modell. Sobald das Modell geladen ist, sendet das Modul das Signal "ready" über den angegebenen Filedescriptor.
 
-- Die Hauptdatei des Projekts befindet sich im Package `laboratorium_ai_asr`.
-- Zugehörige Tests findest du im Verzeichnis `tests`.
+#### 3. Dateien verarbeiten
 
-## Tests ausführen
+Übergeben Sie die Pfade zur Eingabe- (`.json` für Transkription und `.wav` für Audio) und Ausgabe- (`.json` für die Ausrichtung) Datei über die Pipe. Das Modul verarbeitet die Dateien und sendet ein "done" Signal, sobald die Ausrichtung abgeschlossen ist.
 
-Um die Tests auszuführen, stelle sicher, dass das virtuelle Environment aktiviert ist und führe im Terminal:
+**Beispiel:**
 
-`pytest`
+```bash
+echo "path/to/input_transcript.json,path/to/input_audio.wav,path/to/output_alignment.json" >&3
+```
 
-## Abhängigkeiten speichern
+- **Beschreibung:**
+  - Das `echo`-Kommando sendet die Pfade zur Eingabe- und Ausgabedatei über den Filedescriptor `3`.
+  - Das Modul empfängt die Pfade, führt die erzwungene Ausrichtung durch und speichert das Ergebnis in der `.json`-Datei.
+  - Nach Abschluss sendet das Modul ein "done" Signal über den Filedescriptor.
 
-Wenn neue Pakete installiert wurden, führe vor dem Commit das Skript `venv-save-dependencies.sh` aus, um die neuen Pakete aus dem virtuellen Environment in die `requirements.txt` zu extrahieren:
+**Vollständiger Ablauf:**
 
-`./venv-save-dependencies.sh`
+1. **Starten Sie das Forced Alignment-Modul:**
 
-## Continuous Integration (CI)
+   ```bash
+   python -m laboratorium_ai_forced_alignment -f 3
+   ```
 
-Nachdem der Code ins Repository gepusht wurde, führt die CI automatisch die Tests durch. Bitte überprüfe, ob diese erfolgreich waren und bessere gegebenenfalls nach.
+2. **Senden Sie die Dateiwege zur Ausrichtung:**
 
-## Viel Erfolg bei der Entwicklung!
+   ```bash
+   echo "path/to/input_transcript.json,path/to/input_audio.wav,path/to/output_alignment.json" >&3
+   ```
+
+3. **Wiederholen Sie Schritt 2 für weitere Dateien:**
+
+   ```bash
+   echo "path/to/another_input_transcript.json,path/to/another_input_audio.wav,path/to/another_output_alignment.json" >&3
+   ```
+
+### Beispiel mit Shell-Skript
+
+Hier ist ein Beispiel, wie Sie das Forced Alignment-Paket in einem Shell-Skript nutzen können:
+
+```bash
+#!/bin/bash
+
+# Öffnen Sie einen Dateideskriptor (z.B. 3) für die Pipe-Kommunikation
+
+exec 3<>/dev/null
+
+# Starten Sie das Forced Alignment-Modul im Hintergrund und verbinden Sie den Filedescriptor
+
+python -m laboratorium_ai_forced_alignment -f 3 &
+
+# PID des Forced Alignment-Moduls speichern, um es später beenden zu können
+
+FA_PID=$!
+
+# Warten Sie auf das "ready" Signal
+
+read -u 3 signal
+if [ "$signal" = "ready" ]; then
+echo "Modell ist bereit zur Verarbeitung."
+
+    # Senden Sie die Eingabe- und Ausgabepfade
+    echo "path/to/input_transcript.json,path/to/input_audio.wav,path/to/output_alignment.json" >&3
+
+    # Warten Sie auf das "done" Signal
+    read -u 3 signal_done
+    if [ "$signal_done" = "done" ]; then
+        echo "Ausrichtung abgeschlossen."
+    fi
+
+    # Weitere Ausrichtungen können hier hinzugefügt werden
+    echo "path/to/another_input_transcript.json,path/to/another_input_audio.wav,path/to/another_output_alignment.json" >&3
+
+    # Warten Sie erneut auf das "done" Signal
+    read -u 3 signal_done
+    if [ "$signal_done" = "done" ]; then
+        echo "Weitere Ausrichtung abgeschlossen."
+    fi
+
+fi
+
+# Schließen Sie den Filedeskriptor
+
+exec 3>&-
+```
+
+## Lizenz
+
+Dieses Projekt ist unter der MIT-Lizenz lizenziert. Weitere Details finden Sie in der [LICENSE](LICENSE)-Datei.
