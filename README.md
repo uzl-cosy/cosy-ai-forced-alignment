@@ -40,7 +40,7 @@ This package is managed with [Poetry](https://python-poetry.org/). Follow these 
 
    ```bash
    git clone https://github.com/uzl-cosy/cosy-ai-forced-alignment.git
-   cd laboratorium-ai-forced-alignment
+   cd cosy-ai-forced-alignment
    ```
 
 2. **Install Dependencies:**
