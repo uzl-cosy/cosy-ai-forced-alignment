@@ -4,178 +4,178 @@
 ![License](https://img.shields.io/badge/License-MIT-green.svg)
 ![Poetry](https://img.shields.io/badge/Build-Poetry-blue.svg)
 
-**Laboratorium AI Forced Alignment** ist ein Python-Paket zur erzwungenen Ausrichtung von Transkriptionen mit Audioaufnahmen. Es verarbeitet `.wav`-Audiodateien zusammen mit vorhandenen Transkriptionsdaten in `.json`-Dateien und generiert präzise Zeitstempel für Sätze und Wörter. Das Paket nutzt moderne Sprachmodelle und Bibliotheken wie `torchaudio` und `nltk` für effiziente und genaue Ergebnisse.
+**Laboratorium AI Forced Alignment** is a Python package for forced alignment of transcriptions with audio recordings. It processes `.wav` audio files along with existing transcription data in `.json` files and generates precise timestamps for sentences and words. The package uses modern speech models and libraries like `torchaudio` and `nltk` for efficient and accurate results.
 
-## Inhaltsverzeichnis
+## Table of Contents
 
 - [Laboratorium AI Forced Alignment](#laboratorium-ai-forced-alignment)
-  - [Inhaltsverzeichnis](#inhaltsverzeichnis)
-  - [Überblick](#überblick)
-    - [Hauptmerkmale](#hauptmerkmale)
-  - [Installation und Build](#installation-und-build)
-  - [Nutzung](#nutzung)
-    - [CLI-Verwendung mit Filedescriptoren](#cli-verwendung-mit-filedescriptoren)
-      - [1. Modul starten und Modell laden](#1-modul-starten-und-modell-laden)
-      - [2. Warten auf das "ready" Signal](#2-warten-auf-das-ready-signal)
-      - [3. Dateien verarbeiten](#3-dateien-verarbeiten)
-    - [Beispiel mit Shell-Skript](#beispiel-mit-shell-skript)
-  - [Lizenz](#lizenz)
+  - [Table of Contents](#table-of-contents)
+  - [Overview](#overview)
+    - [Key Features](#key-features)
+  - [Installation and Build](#installation-and-build)
+  - [Usage](#usage)
+    - [CLI Usage with File Descriptors](#cli-usage-with-file-descriptors)
+      - [1. Start Module and Load Model](#1-start-module-and-load-model)
+      - [2. Wait for "ready" Signal](#2-wait-for-ready-signal)
+      - [3. Process Files](#3-process-files)
+    - [Example with Shell Script](#example-with-shell-script)
+  - [License](#license)
 
-## Überblick
+## Overview
 
-**Laboratorium AI Forced Alignment** bietet eine leistungsstarke Lösung zur Synchronisierung von Transkriptionen mit ihren entsprechenden Audioaufnahmen. Dies ist besonders nützlich für Anwendungen wie Untertitelung, Sprachforschung und automatische Inhaltsanalyse.
+**Laboratorium AI Forced Alignment** provides a powerful solution for synchronizing transcriptions with their corresponding audio recordings. This is particularly useful for applications like subtitling, speech research, and automated content analysis.
 
-### Hauptmerkmale
+### Key Features
 
-- **Forced Alignment:** Präzise Zuordnung von Transkriptionssätzen und -wörtern zu den entsprechenden Audiozeitstempeln.
-- **Modellvielfalt:** Nutzung fortschrittlicher Sprachmodelle für genaue Ergebnisse.
-- **Textnormalisierung:** Umfasst die Umwandlung von Zahlen in Worte und die Anpassung von Umlauten.
-- **Flexible Konfiguration:** Anpassung von Gerät (`DEVICE`) und Berechnungstyp (`COMPUTE_TYPE`) für optimale Leistung und Genauigkeit.
+- **Forced Alignment:** Precise mapping of transcription sentences and words to corresponding audio timestamps.
+- **Model Variety:** Utilization of advanced speech models for accurate results.
+- **Text Normalization:** Includes conversion of numbers to words and umlaut adjustments.
+- **Flexible Configuration:** Adjustment of device (`DEVICE`) and computation type (`COMPUTE_TYPE`) for optimal performance and accuracy.
 
-## Installation und Build
+## Installation and Build
 
-Dieses Paket wird mit [Poetry](https://python-poetry.org/) verwaltet. Folgen Sie diesen Schritten, um das Paket zu installieren und zu bauen:
+This package is managed with [Poetry](https://python-poetry.org/). Follow these steps to install and build the package:
 
-1. **Repository klonen:**
+1. **Clone Repository:**
 
    ```bash
-   git clone https://github.com/yourusername/laboratorium-ai-forced-alignment.git
+   git clone https://github.com/uzl-cosy/cosy-ai-forced-alignment.git
    cd laboratorium-ai-forced-alignment
    ```
 
-2. **Abhängigkeiten installieren:**
+2. **Install Dependencies:**
 
    ```bash
    poetry install
    ```
 
-3. **Virtuelle Umgebung aktivieren:**
+3. **Activate Virtual Environment:**
 
    ```bash
    poetry shell
    ```
 
-4. **Paket bauen:**
+4. **Build Package:**
 
    ```bash
    poetry build
    ```
 
-   Dieses Kommando erstellt die distributierbaren Dateien im `dist/`-Verzeichnis.
+   This command creates the distributable files in the `dist/` directory.
 
-## Nutzung
+## Usage
 
-Das Paket wird über die Kommandozeile (CLI) als dauerhaft laufendes Modul ausgeführt. Es ermöglicht die erzwungene Ausrichtung von Transkriptionsdaten und Audioaufnahmen mittels Filedescriptoren. Die Kommunikation erfolgt über eine Pipe, wobei das Modul "ready" sendet, sobald das Modell geladen ist und bereit zur Verarbeitung ist.
+The package runs as a continuously running module via command line (CLI). It enables forced alignment of transcription data and audio recordings using file descriptors. Communication occurs through a pipe, where the module sends "ready" once the model is loaded and ready for processing.
 
-### CLI-Verwendung mit Filedescriptoren
+### CLI Usage with File Descriptors
 
-#### 1. Modul starten und Modell laden
+#### 1. Start Module and Load Model
 
-Starten Sie das Forced Alignment-Modul über die CLI. Das Modul lädt das Modell und signalisiert über den Filedescriptor, dass es bereit ist.
+Start the Forced Alignment module via CLI. The module loads the model and signals through the file descriptor when it's ready.
 
 ```bash
 python -m laboratorium_ai_forced_alignment -f <FD>
 ```
 
-**Parameter:**
+**Parameters:**
 
-- `-f`, `--fd`: Filedescriptor für die Pipe-Kommunikation.
+- `-f`, `--fd`: File descriptor for pipe communication.
 
-**Beispiel:**
+**Example:**
 
 ```bash
 python -m laboratorium_ai_forced_alignment -f 3
 ```
 
-#### 2. Warten auf das "ready" Signal
+#### 2. Wait for "ready" Signal
 
-Nachdem das Modul gestartet wurde, lädt es das Forced Alignment-Modell. Sobald das Modell geladen ist, sendet das Modul das Signal "ready" über den angegebenen Filedescriptor.
+After the module starts, it loads the Forced Alignment model. Once loaded, the module sends a "ready" signal through the specified file descriptor.
 
-#### 3. Dateien verarbeiten
+#### 3. Process Files
 
-Übergeben Sie die Pfade zur Eingabe- (`.json` für Transkription und `.wav` für Audio) und Ausgabe- (`.json` für die Ausrichtung) Datei über die Pipe. Das Modul verarbeitet die Dateien und sendet ein "done" Signal, sobald die Ausrichtung abgeschlossen ist.
+Pass the paths to input (`.json` for transcription and `.wav` for audio) and output (`.json` for alignment) files through the pipe. The module processes the files and sends a "done" signal once alignment is complete.
 
-**Beispiel:**
+**Example:**
 
 ```bash
 echo "path/to/input_transcript.json,path/to/input_audio.wav,path/to/output_alignment.json" >&3
 ```
 
-- **Beschreibung:**
-  - Das `echo`-Kommando sendet die Pfade zur Eingabe- und Ausgabedatei über den Filedescriptor `3`.
-  - Das Modul empfängt die Pfade, führt die erzwungene Ausrichtung durch und speichert das Ergebnis in der `.json`-Datei.
-  - Nach Abschluss sendet das Modul ein "done" Signal über den Filedescriptor.
+- **Description:**
+  - The `echo` command sends the input and output file paths through file descriptor `3`.
+  - The module receives the paths, performs forced alignment, and saves the result in the `.json` file.
+  - Upon completion, the module sends a "done" signal through the file descriptor.
 
-**Vollständiger Ablauf:**
+**Complete Flow:**
 
-1. **Starten Sie das Forced Alignment-Modul:**
+1. **Start the Forced Alignment module:**
 
    ```bash
    python -m laboratorium_ai_forced_alignment -f 3
    ```
 
-2. **Senden Sie die Dateiwege zur Ausrichtung:**
+2. **Send file paths for alignment:**
 
    ```bash
    echo "path/to/input_transcript.json,path/to/input_audio.wav,path/to/output_alignment.json" >&3
    ```
 
-3. **Wiederholen Sie Schritt 2 für weitere Dateien:**
+3. **Repeat step 2 for additional files:**
 
    ```bash
    echo "path/to/another_input_transcript.json,path/to/another_input_audio.wav,path/to/another_output_alignment.json" >&3
    ```
 
-### Beispiel mit Shell-Skript
+### Example with Shell Script
 
-Hier ist ein Beispiel, wie Sie das Forced Alignment-Paket in einem Shell-Skript nutzen können:
+Here's an example of how to use the Forced Alignment package in a shell script:
 
 ```bash
 #!/bin/bash
 
-# Öffnen Sie einen Dateideskriptor (z.B. 3) für die Pipe-Kommunikation
+# Open a file descriptor (e.g., 3) for pipe communication
 
 exec 3<>/dev/null
 
-# Starten Sie das Forced Alignment-Modul im Hintergrund und verbinden Sie den Filedescriptor
+# Start the Forced Alignment module in background and connect the file descriptor
 
 python -m laboratorium_ai_forced_alignment -f 3 &
 
-# PID des Forced Alignment-Moduls speichern, um es später beenden zu können
+# Store PID of Forced Alignment module to terminate it later
 
 FA_PID=$!
 
-# Warten Sie auf das "ready" Signal
+# Wait for "ready" signal
 
 read -u 3 signal
 if [ "$signal" = "ready" ]; then
-echo "Modell ist bereit zur Verarbeitung."
+      echo "Model is ready for processing."
 
-    # Senden Sie die Eingabe- und Ausgabepfade
-    echo "path/to/input_transcript.json,path/to/input_audio.wav,path/to/output_alignment.json" >&3
+      # Send input and output paths
+      echo "path/to/input_transcript.json,path/to/input_audio.wav,path/to/output_alignment.json" >&3
 
-    # Warten Sie auf das "done" Signal
-    read -u 3 signal_done
-    if [ "$signal_done" = "done" ]; then
-        echo "Ausrichtung abgeschlossen."
-    fi
+      # Wait for "done" signal
+      read -u 3 signal_done
+      if [ "$signal_done" = "done" ]; then
+            echo "Alignment completed."
+      fi
 
-    # Weitere Ausrichtungen können hier hinzugefügt werden
-    echo "path/to/another_input_transcript.json,path/to/another_input_audio.wav,path/to/another_output_alignment.json" >&3
+      # Additional alignments can be added here
+      echo "path/to/another_input_transcript.json,path/to/another_input_audio.wav,path/to/another_output_alignment.json" >&3
 
-    # Warten Sie erneut auf das "done" Signal
-    read -u 3 signal_done
-    if [ "$signal_done" = "done" ]; then
-        echo "Weitere Ausrichtung abgeschlossen."
-    fi
+      # Wait again for "done" signal
+      read -u 3 signal_done
+      if [ "$signal_done" = "done" ]; then
+            echo "Additional alignment completed."
+      fi
 
 fi
 
-# Schließen Sie den Filedeskriptor
+# Close the file descriptor
 
 exec 3>&-
 ```
 
-## Lizenz
+## License
 
-Dieses Projekt ist unter der MIT-Lizenz lizenziert. Weitere Details finden Sie in der [LICENSE](LICENSE)-Datei.
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
